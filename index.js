@@ -17,6 +17,7 @@ async function run() {
     try {
         const database = client.db("SeanTucker");
         const servicesCollection = database.collection("services");
+        const reviewsCollection = database.collection("reviews");
 
         // sending only 3 services data to the client
         app.get('/', async (req, res) => {
@@ -48,6 +49,23 @@ async function run() {
             const result = await servicesCollection.insertOne(doc);
             res.send(result);
         })
+
+        // Inserting user provided reviews to the reviewsCollection
+        app.post('/reviews', async (req, res) => {
+            const doc = req.body;
+            const result = await reviewsCollection.insertOne(doc);
+            res.send(result);
+        })
+
+        // sending the reviews based on serviceID
+        app.get('/reviews/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { serviceId: id };
+            const cursor = reviewsCollection.find(query);
+            const reviews = await cursor.toArray();
+            res.send(reviews);
+        })
+
 
 
     }
