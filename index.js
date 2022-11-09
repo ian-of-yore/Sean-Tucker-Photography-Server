@@ -66,6 +66,19 @@ async function run() {
             res.send(reviews);
         })
 
+        // sending reviews based on user provided email query
+        app.get('/reviews', async (req, res) => {
+            let query = {};
+            if (req.query.email) {
+                query = {
+                    userEmail: req.query.email
+                }
+            }
+            const cursor = reviewsCollection.find(query);
+            const userReviews = await cursor.toArray();
+            res.send(userReviews);
+        })
+
 
 
     }
