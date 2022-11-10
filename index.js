@@ -48,7 +48,7 @@ async function run() {
         // sending only 3 services data to the client
         app.get('/', async (req, res) => {
             const query = {};
-            const cursor = servicesCollection.find(query).limit(3);
+            const cursor = servicesCollection.find(query).sort({ "_id": -1 }).limit(3);
             const services = await cursor.toArray();
             res.send(services);
         })
@@ -87,7 +87,7 @@ async function run() {
         app.get('/reviews/:id', async (req, res) => {
             const id = req.params.id;
             const query = { serviceId: id };
-            const cursor = reviewsCollection.find(query).sort({"_id" : -1});
+            const cursor = reviewsCollection.find(query).sort({ "_id": -1 });
             const reviews = await cursor.toArray();
             res.send(reviews);
         })
